@@ -1,0 +1,54 @@
+<VirtualHost *:<%= node['gitweb']['ssl'] ? '443' : '80' %>>
+  ServerName <%= @params[:server_name] %>
+  ServerAlias <% @params[:server_aliases].each do |a| %><%= "#{a}" %> <% end %>
+  DocumentRoot <%= @params[:docroot] %>
+ 
+  <% if node['gitweb']['ssl'] %>
+  SSLEngine on
+  SSLProxyEngine on
+  SSLCertificateFile     /etc/ssl/certs/ssl-cert-snakeoil.pem
+  SSLCertificateKeyFile  /etc/ssl/private/ssl-cert-snakeoil.key
+  <% end %>
+  
+  LogLevel info
+  ErrorLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-error.log
+  CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-access.log combined
+
+  SetEnv  GITWEB_CONFIG  /etc/gitweb.conf
+  SetEnv GIT_PROJECT_ROOT /var/git/repositories
+
+  <Directory /usr/share/gitweb>
+    Options FollowSymLinks +ExecCGI
+    AddHandler cgi-script .cgi
+
+    DirectoryIndex gitweb.cgi
+
+    # Pretty gitweb URLs
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^.* /gitweb.cgi/$0 [L,PT]
+  </Directory>
+  
+<% if node['gitweb']['export-http'] %>
+  # Enable git clone over HTTP
+  ScriptAliasMatch \
+          "(?x)^/(.*/(HEAD | \
+          info/refs | \
+          objects/(info/[^/]+ | \
+          [0-9a-f]{2}/[0-9a-f]{38} | \
+          pack/pack-[0-9a-f]{40}\.(pack|idx)) | \
+          git-(upload|receive)-pack))$" \
+          /usr/lib/git-core/git-http-backend/$1
+<% end %>
+</VirtualHost>
+
+<% if node['gitweb']['ssl'] %>
+<VirtualHost *:80>
+  ServerName <%= @params[:server_name] %>
+  ServerAlias <% @params[:server_aliases].each do |a| %><%= "#{a}" %> <% end %>
+
+  RewriteEngine On
+  RewriteRule (.*) https://%{HTTP_HOST}$1
+</VirtualHost>
+<% end %>
