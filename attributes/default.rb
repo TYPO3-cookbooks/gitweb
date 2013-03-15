@@ -22,5 +22,10 @@ default['gitweb']['hostname'] = node['fqdn']
 
 default['gitweb']['path'] = "/var/cache/git"
 
+# if this is set, an entry in the ssl_certificates data bag matching the given name must exist
+# this uses the ssl-certificates cookbook
+# http://github.com/binarymarbles/chef-ssl-certificates
 default['gitweb']['ssl'] = false
+default['gitweb']['ssl_certificate'] = nil
+
 default['gitweb']['export-http'] = true

@@ -12,3 +12,5 @@ end
 recipe "gitweb::default", "Installs and configures gitweb."
 
 supports "debian"
+
+depends "ssl_certificates"
