@@ -31,6 +31,7 @@ if node['gitweb']['ssl']
     ssl_certificate node['gitweb']['ssl_certificate']
     ssl_certfile_path = node['ssl_certificates']['path'] + "/" + node['gerrit']['ssl_certificate'] + ".crt"
     ssl_keyfile_path  = node['ssl_certificates']['path'] + "/" + node['gerrit']['ssl_certificate'] + ".key"
+    ssl_cabundle_path = node['ssl_certificates']['path'] + "/" + node['gerrit']['ssl_certificate'] + ".ca-bundle"
   end
 end
 
@@ -38,8 +39,10 @@ web_app node['gitweb']['hostname'] do
   server_name node['gitweb']['hostname']
   server_aliases []
   docroot "/usr/share/gitweb"
-  ssl_certfile ssl_certfile_path
-  ssl_keyfile ssl_keyfile_path
+  ssl_certfile         ssl_certfile_path
+  ssl_keyfile          ssl_keyfile_path
+  ssl_cabundle_used    ::File::exist?(ssl_cabundle_path)
+  ssl_cabundle         ssl_cabundle_path
 end
 
 template "/etc/gitweb.conf" do
