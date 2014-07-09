@@ -29,9 +29,9 @@ if node['gitweb']['ssl']
   # don't use snakeoil CA, if specified otherwise
   if node['gitweb']['ssl_certificate']
     ssl_certificate node['gitweb']['ssl_certificate']
-    ssl_certfile_path = node['ssl_certificates']['path'] + "/" + node['gerrit']['ssl_certificate'] + ".crt"
-    ssl_keyfile_path  = node['ssl_certificates']['path'] + "/" + node['gerrit']['ssl_certificate'] + ".key"
-    ssl_cabundle_path = node['ssl_certificates']['path'] + "/" + node['gerrit']['ssl_certificate'] + ".ca-bundle"
+    ssl_certfile_path = node['ssl_certificates']['path'] + "/" + node['gitweb']['ssl_certificate'] + ".crt"
+    ssl_keyfile_path  = node['ssl_certificates']['path'] + "/" + node['gitweb']['ssl_certificate'] + ".key"
+    ssl_cabundle_path = node['ssl_certificates']['path'] + "/" + node['gitweb']['ssl_certificate'] + ".ca-bundle"
   end
 end
 
