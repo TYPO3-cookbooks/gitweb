@@ -1,3 +1,4 @@
+name             "gitweb"
 maintainer       "Steffen Gebert"
 maintainer_email "steffen.gebert@typo3.org"
 license          "Apache 2.0"
