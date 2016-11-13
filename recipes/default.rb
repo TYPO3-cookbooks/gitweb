@@ -20,6 +20,8 @@
 
 package "gitweb"
 
+package "libapache2-mod-perl2"
+
 if node['gitweb']['ssl']
   include_recipe "apache2::mod_ssl"
 
