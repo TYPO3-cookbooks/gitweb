@@ -37,7 +37,10 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^.* /gitweb.cgi/$0 [L,PT]
   </Directory>
-  
+
+  # facebook seems to like this file name and search for it everywhere, causing DoS
+  AliasMatch .*/git-logo.png /usr/share/gitweb/git-logo.png
+
 <% if node['gitweb']['export-http'] %>
   # Enable git clone over HTTP
   # see http://www.kernel.org/pub/software/scm/git/docs/git-http-backend.html
