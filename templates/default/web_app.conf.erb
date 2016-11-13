@@ -17,20 +17,20 @@
   ErrorLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-error.log
   CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-access.log combined
 
-  SetEnv GITWEB_CONFIG  /etc/gitweb.conf
-
   DirectoryIndex gitweb.cgi
 
-  ScriptAlias /gitweb.cgi /usr/lib/cgi-bin/gitweb.cgi
-  Alias /gitweb.css /usr/share/gitweb/gitweb.css
-  Alias /git-logo.png /usr/share/gitweb/git-logo.png
-  Alias /git-favicon.png /usr/share/gitweb/git-favicon.png
-  
-  <Directory /usr/share/gitweb>
-    Options +FollowSymLinks +ExecCGI
-    AddHandler cgi-script .cgi
+  <Directory "/usr/share/gitweb">
 
+    DirectoryIndex gitweb.cgi
+    Require all granted
+    Options ExecCGI
+    AddHandler perl-script .cgi
+    PerlResponseHandler ModPerl::Registry
+    PerlOptions +ParseHeaders
+    SetEnv GITWEB_CONFIG  /etc/gitweb.conf
+    
     # Pretty gitweb URLs
+    Options +FollowSymLinks
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
