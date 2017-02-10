@@ -18,6 +18,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+package "highlight" do
+  action :install
+end
+
 package "gitweb"
 
 package "libapache2-mod-perl2"
