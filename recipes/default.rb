@@ -22,6 +22,7 @@ package "gitweb"
 
 include_recipe "apache2::mod_perl"
 include_recipe "apache2::mod_cgid" if node['gitweb']['export-http']
+package "libcgi-pm-perl"
 
 if node['gitweb']['ssl']
   include_recipe "apache2::mod_ssl"
